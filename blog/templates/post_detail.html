@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="post">
+        {% if post.published_date %}
+            <div class="date">
+                {{ post.published_date }}
+            </div>
+        {% endif %}
+        <h1>{{ post.title }}</h1>
+        <b>Autor: {{ post.author }}</b>
+        <p>{{ post.text|linebreaks }}</p>
+        <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}">Post editieren</a>
+    </div>
+    <hr/>
+    <h1>Kommentare</h1>
+    <div class="comment">
+      {% if comments_list %}
+      <div>
+        {% for comment in comments_list %}
+        <div>
+          <b>Autor: {{ comment.author }}</b>
+          <p>{{ comment.text|linebreaks }}</p>
+          <hr/>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>No comments are available.</p>
+      {% endif %}
+      <form method="POST" class="post-form">{% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="save btn btn-default">Kommentieren</button>
+      </form>
+    </div>
+{% endblock %}
